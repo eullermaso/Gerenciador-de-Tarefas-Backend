@@ -1,5 +1,7 @@
+//Importando o mongoose, uma biblioteca que facilita a nossa conexão e interação com o mongodb
 const mongoose = require("mongoose");
 
+//função assincrona para realizar a conexão com o banco de dados
 const connectToDatabase = async () => {
     try {
         await mongoose.connect(
@@ -11,4 +13,5 @@ const connectToDatabase = async () => {
     }
 };
 
+//Exportando a função criada
 module.exports = connectToDatabase;
