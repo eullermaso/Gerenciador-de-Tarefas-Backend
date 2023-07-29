@@ -32,6 +32,22 @@ app.get("/tasks", async (req,res) => {
     }catch(error){
         res.status(500).send(error.message);
     }
+});
+
+app.get("/tasks/:id", async (req,res) => {
+
+    try{
+        const taskId = req.params.id;
+        const task = await TaskModel.findById(taskId);
+
+        if(!task){
+            res.status(404).send("Essa tarefa não foi encontrada")
+        }
+        res.status(200).send(task);
+    }catch(error){
+        res.status(500).send(error.message)
+    }
+
 })
 
 //Criação de rota para postar informação no banco de dados
@@ -50,7 +66,7 @@ app.post("/tasks", async (req,res) => {
 });
 
 //Endpoint para deletar por id
-app.delete('/tasks:id', async (req,res) => {
+app.delete('/tasks/:id', async (req,res) => {
     try{
         //Para acessar o ID
         const taskId = req.params.id;
@@ -58,7 +74,7 @@ app.delete('/tasks:id', async (req,res) => {
         const taskToDelete = await TaskModel.findById(taskId);
 
         if(!taskToDelete){
-            return res.status(500).send("Essa tarefa não foi encontrada");
+            return res.status(404).send("Essa tarefa não foi encontrada");
         }
 
         const deleteTask = await TaskModel.findByIdAndDelete(taskId);
