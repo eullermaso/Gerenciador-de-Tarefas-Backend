@@ -37,6 +37,7 @@ app.get("/tasks", async (req,res) => {
 app.get("/tasks/:id", async (req,res) => {
 
     try{
+        //captura o id
         const taskId = req.params.id;
         const task = await TaskModel.findById(taskId);
 
@@ -48,6 +49,42 @@ app.get("/tasks/:id", async (req,res) => {
         res.status(500).send(error.message)
     }
 
+});
+
+app.patch("/tasks/:id", async (req,res) => {
+    try{
+        const taskId = req.params.id;
+
+        //captura o que foi colocado no body
+        const taskData = req.body;
+
+        const taskUpdate = await TaskModel.findById(taskId);
+
+        //Colocando em uma lista os campos que podem ser utilizados
+        const allowedUpdates = ['isCompleted'];
+
+        //retornando o que foi colocado no body como objeto
+        const requestedUpdates = Object.keys(req.body);
+
+
+        //Pra cada campo que a gente recebeu no body vamos verificar se a lista de campos permitidos inclui este campo
+        for (update of requestedUpdates){
+            //Compara se o que está no body(allowedUpdates) tem alguma parte igual ao update(requestedUpdates)
+            if(allowedUpdates.includes(update)){
+                //vamos pegar a perte igual encontrada anteriormente(que nesse caso é o isCompleted) e igualar ela ao que está escrito body para que realizar o Patch sejá possível atualizar a task.
+                taskUpdate[update] = taskData[update];
+            }else{
+                return res.status(500).send("Um ou mais campos não são editaveis.")
+            }
+        }
+
+        await taskUpdate.save()
+        return res.status(200).send(taskUpdate);
+
+    }catch(error){
+        return res.status(500).send(error.message)
+
+    }
 })
 
 //Criação de rota para postar informação no banco de dados
