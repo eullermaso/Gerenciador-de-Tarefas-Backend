@@ -1,6 +1,7 @@
 const TaskModel = require('../models/task.model')
 
 const { notFoundError} = require('../errors/mongodb.errors')
+const { notAllowedFiieldsToUpdateError } = require('../errors/general.errors')
 
 class TaskController {
     constructor(req,res){
@@ -62,7 +63,7 @@ class TaskController {
                     //vamos pegar a perte igual encontrada anteriormente(que nesse caso é o isCompleted) e igualar ela ao que está escrito body para que realizar o Patch sejá possível atualizar a task.
                     taskUpdate[update] = taskData[update];
                 }else{
-                    return this.res.status(500).send("Um ou mais campos não são editaveis.")
+                    return notAllowedFiieldsToUpdateError(this.res);
                 }
             }
     
