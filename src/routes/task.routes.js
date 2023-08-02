@@ -12,13 +12,10 @@ const router = express.Router();
 //Criação de rota para capturar informação do banco de dados
 router.get("/", async (req,res) => {
     return new TaskController(req,res).getTask();
-    
 });
 
 router.get("/:id", async (req,res) => {
-
     return new TaskController(req,res).getTaskById();
-
 });
 
 router.patch("/:id", async (req,res) => {
@@ -34,5 +31,6 @@ router.post("/", async (req,res) => {
 router.delete('/:id', async (req,res) => {
     return new TaskController(req,res).Delete();
 });
+
 
 module.exports = router;
